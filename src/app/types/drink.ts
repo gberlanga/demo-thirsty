@@ -11,7 +11,7 @@ export interface ApiDrinkResponse {
         idDrink: string,
         strDrink: string,
         strDrinkThumb: string,
-        strInstructions: string,
+        strInstructions: string | null,
         [key: string]: string | null
     }[]
 }

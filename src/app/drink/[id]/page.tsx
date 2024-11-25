@@ -6,7 +6,6 @@ interface DrinkPageProps {
 }
 
 const DrinkPage: React.FC<DrinkPageProps> = ({ drink }) => {
-  console.log(drink)
   return <DrinkDetails drink={drink} />;
 };
 

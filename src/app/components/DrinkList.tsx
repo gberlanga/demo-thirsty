@@ -1,17 +1,17 @@
 import { FC } from "react";
-import Link from "next/link";
+
 import { Drink } from "../types/drink";
 
 interface DrinkListProps {
     drinks: Drink[];
+    onClick: (drink: Drink) => void; 
 }
 
-const DrinkList: FC<DrinkListProps> = ({ drinks }) => {
+const DrinkList: FC<DrinkListProps> = ({ drinks, onClick }) => {
     return (
         <div className="drink-list space-y-4">
-            {drinks.map((drink) => (
-                <Link href={`/drink/${drink.idDrink}`} key={drink.idDrink}>
-                    <div className="flex items-center justify-between h-16 bg-white shadow-md rounded-lg p-4 hover:bg-gray-50 transition">
+            {drinks.map((drink, index) => (
+                    <div key={index} className="flex items-center justify-between h-16 bg-white shadow-md rounded-lg p-4 hover:bg-gray-50 transition" onClick={() => onClick(drink)}>
                         <div className="flex items-center space-x-4">
                             <img
                                 src={drink.strDrinkThumb}
@@ -37,25 +37,9 @@ const DrinkList: FC<DrinkListProps> = ({ drinks }) => {
                             </svg>
                         </span>
                     </div>
-                </Link>
             ))}
         </div>
     );
 };
-
-// const DrinkList: FC<DrinkListProps> = ({ drinks }) => {
-//     return (
-//         <div className="drink-list">
-//             {drinks.map((drink) => (
-//                 <Link href={`/drink/${drink.idDrink}`} key={drink.idDrink}>
-//                     <div className="drink-item">
-//                         <img src={drink.strDrinkThumb} alt={drink.strDrink} />
-//                         <p>{drink.strDrink}</p>
-//                     </div>
-//                 </Link>
-//             ))}
-//         </div>
-//     );
-// };
 
 export default DrinkList
