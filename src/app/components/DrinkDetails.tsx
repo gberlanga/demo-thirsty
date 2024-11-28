@@ -22,7 +22,6 @@ const DrinkDetails: FC<DrinkDetailsProps> = ({ drink }) => {
         );
       }
 
-  // Memoize the ingredient colors to persist across re-renders for the same drink
   const ingredientsData = useMemo(() => {
     return drink.ingredients.map((ingredient) => ({
       name: ingredient.name,
@@ -30,13 +29,13 @@ const DrinkDetails: FC<DrinkDetailsProps> = ({ drink }) => {
       pieChartAmount:  normalizeIngredient(ingredient.amount),
       color: `hsl(${Math.abs(
         ingredient.name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 360
-      )}, 70%, 80%)`, // Deterministic pastel colors based on ingredient name
+      )}, 70%, 80%)`,
     }));
   }, [drink]);
 
   return (
     <div className="drink-detail p-5 space-y-6">
-      {/* Image View */}
+      {/* Drink Image */}
       <img
         src={drink.strDrinkThumb}
         alt={drink.strDrink}
@@ -44,14 +43,14 @@ const DrinkDetails: FC<DrinkDetailsProps> = ({ drink }) => {
         style={{marginTop:"30px"}}
       />
 
-      {/* Name */}
+      {/* Drink Name */}
       <h1 className="text-center text-xl font-bold mt-5">{drink.strDrink}</h1>
 
             {/* Ingredients Label */}
             <h2 className="text-lg font-bold ml-5 mb-5" style={{marginTop:"30px"}}>Ingredients</h2>
 
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {/* Legend */}
+            {/* Ingredient List */}
             <ul className="flex-wrap gap-4 m-5">
                 {ingredientsData.map((item, index) => (
                 <li key={index} className="flex items-center space-x-2">

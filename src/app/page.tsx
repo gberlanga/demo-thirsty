@@ -1,7 +1,5 @@
 
 import axios from "axios";
-// import SearchBar from "./components/SearchBar";
-// import DrinkList from "./components/DrinkList";
 import { ApiDrinkResponse, Drink } from "./types/drink";
 import { formatDrink } from "./helpers/FormatDrink";
 import Homepage from "./components/HomePage";

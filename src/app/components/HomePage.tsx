@@ -40,7 +40,7 @@ const Homepage: FC<HomepageProps> = ({ fetchDrinks }) => {
                 {isSidebarVisible ? "<<" : ">>"}
             </button>
 
-            {/* Left Column: Search and Drink List */}
+            {/* Search and Drink List */}
             <div
                 className={`absolute md:relative top-0 left-0 bg-gray-100 min-h-screen w-3/4 md:w-auto z-10 ${
                     isSidebarVisible ? "translate-x-0" : "-translate-x-full"
@@ -57,7 +57,7 @@ const Homepage: FC<HomepageProps> = ({ fetchDrinks }) => {
                 </main>
             </div>
 
-            {/* Right Column: Fixed Drink Details */}
+            {/* Drink Details */}
             <div className="col-span-2 p-4 min-h-screen md:fixed md:right-0 md:w-2/3">
                 <DrinkDetails drink={selectedDrink} />
             </div>
