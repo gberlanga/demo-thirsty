@@ -15,18 +15,39 @@ interface Ingredient {
     tsp: 4.92892,   // Teaspoons to milliliters
     tblsp: 14.7868, // Tablespoons to milliliters
     cl: 10,         // Centiliters to milliliters
+    shot: 44.3603   // shot to milliliters
   };
+
+  const searchTerms = /oz|cup|tsp|tblsp|cl|shot/;
   
   // Normalize ingredients
   export const normalizeIngredient = (ingredient: string): number | null => {
-        const match = ingredient.match(/^(\d+(?:\s\d+\/\d+)?|\d+\.\d+)\s*(\w+)$/);
-        if(!match) return null;
-        const [_, value, unit] = match;
-        const numericValue = parseFloat(value);
-        
-        const conversionRate = unitConversionTable[unit.toLowerCase()];
-        if(!conversionRate) return null;
+    ingredient = ingredient.toLocaleLowerCase();
+    const index = ingredient.search(searchTerms);
+    if(index == -1) return null;
+    const value = ingredient.substring(0, index-1);
+    const unit = ingredient.substring(index)
+  
+    // Convert mixed fractions to decimals
+    const numericValue = value.includes("/")
+      ? value
+          .split(" ")
+          .reduce((acc, part) =>
+            part.includes("/")
+              ? acc + eval(part) // Convert fraction to decimal
+              : acc + parseFloat(part), 0)
+      : parseFloat(value);
+  
+    console.log(`numericValue: ${numericValue}`);
 
-        return numericValue * conversionRate;
+    console.log(`${unit} and ${unit.trim().toLocaleLowerCase()}`)
+  
+    // Check if unit is supported
+    const conversionRate = unitConversionTable[unit.trim()];
+    console.log(`${unit} conv = ${conversionRate}`)
+    if (!conversionRate) return null;
+  
+    // Return normalized value in milliliters
+    return numericValue * conversionRate;
   };
   
