@@ -11,14 +11,15 @@ const DrinkList: FC<DrinkListProps> = ({ drinks, onClick }) => {
     return (
         <div className="drink-list space-y-4">
             {drinks.map((drink, index) => (
-                    <div key={index} className="flex items-center justify-between h-16 bg-white shadow-md rounded-lg p-4 hover:bg-gray-50 transition" onClick={() => onClick(drink)}>
+                    <div key={index} className="flex items-center justify-between bg-white shadow-md rounded-lg p-4 hover:bg-gray-50 transition" style={{height: "60px"}}onClick={() => onClick(drink)}>
                         <div className="flex items-center space-x-4">
                             <img
                                 src={drink.strDrinkThumb}
                                 alt={drink.strDrink}
-                                className="w-10 h-10 rounded-full object-cover"
+                                className="size-10 rounded-full object-cover mr-2.5 my-2.5"
+                                style={{marginLeft:"15px"}}
                             />
-                            <p className="text-lg font-semibold text-gray-700">{drink.strDrink}</p>
+                            <p className="lg:text-lg md:text-xs font-semibold text-gray-700">{drink.strDrink}</p>
                         </div>
                         <span className="text-gray-400">
                             <svg

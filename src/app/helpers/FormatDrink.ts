@@ -3,7 +3,10 @@ import { Drink } from "../types/drink";
 export const formatDrink = (drink: { [key: string]: string | null }): Drink => {
   const ingredients: { name: string; amount: string }[] = [];
 
-  for (let i = 1; i <= 15; i++) {
+  let hasIngredients = true;
+  let i = 1;
+
+  while (hasIngredients) {
     const ingredient = drink[`strIngredient${i}`];
     const measure = drink[`strMeasure${i}`];
 
@@ -12,6 +15,9 @@ export const formatDrink = (drink: { [key: string]: string | null }): Drink => {
         name: ingredient,
         amount: measure || "",
       });
+      i++;
+    } else {
+      break;
     }
   }
 

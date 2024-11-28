@@ -1,21 +1,38 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { Drink } from "../types/drink";
+import landingImage from "../assets/thirsty-landing-page.jpeg"
+import Image  from "next/image"
+import { normalizeIngredient } from "@/helpers/NormalizeIngredients";
 
 interface DrinkDetailsProps {
-    drink: Drink | null
+    drink: Drink | null;
 }
 
 const DrinkDetails: FC<DrinkDetailsProps> = ({ drink }) => {
-  if (!drink) {
-    return <p className="text-center text-gray-500">empty</p>;
-  }
+    if (!drink) {
+      return (
+        <div className="grid place-items-center h-screen">
+            <Image
+            src={landingImage}
+            alt="Thirsty landing page"
+            className="w-full max-w-3xl h-auto mx-auto rounded-xl"
+            />
+        </div>
+        );
+      }
 
-  const ingredientsData = drink.ingredients.map((ingredient, index) => ({
-    name: ingredient.name,
-    amount: parseFloat(ingredient.amount) || 0,
-    color: `hsl(${Math.random() * 360}, 70%, 80%)`, // Pastel colors
-  }));
+  // Memoize the ingredient colors to persist across re-renders for the same drink
+  const ingredientsData = useMemo(() => {
+    return drink.ingredients.map((ingredient) => ({
+      name: ingredient.name,
+      amount: ingredient.amount,
+      pieChartAmount:  normalizeIngredient(ingredient.amount),
+      color: `hsl(${Math.abs(
+        ingredient.name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 360
+      )}, 70%, 80%)`, // Deterministic pastel colors based on ingredient name
+    }));
+  }, [drink]);
 
   return (
     <div className="drink-detail p-5 space-y-6">
@@ -23,51 +40,55 @@ const DrinkDetails: FC<DrinkDetailsProps> = ({ drink }) => {
       <img
         src={drink.strDrinkThumb}
         alt={drink.strDrink}
-        className="mt-8 mx-auto w-40 h-40 rounded-lg object-cover"
+        className=" mx-auto w-40 h-40 rounded-full object-cover"
+        style={{marginTop:"30px"}}
       />
 
       {/* Name */}
-      <h1 className="text-center text-2xl font-bold mt-5">{drink.strDrink}</h1>
+      <h1 className="text-center text-xl font-bold mt-5">{drink.strDrink}</h1>
 
-      {/* Ingredients Label */}
-      <h2 className="text-lg font-bold mt-8 ml-5 mb-5">Ingredients</h2>
+            {/* Ingredients Label */}
+            <h2 className="text-lg font-bold ml-5 mb-5" style={{marginTop:"30px"}}>Ingredients</h2>
 
-      {/* Legend */}
-      <ul className="flex flex-wrap gap-4 mx-5">
-        {ingredientsData.map((item, index) => (
-          <li key={index} className="flex items-center space-x-2">
-            <div
-              className="w-5 h-5 rounded-md"
-              style={{ backgroundColor: item.color }}
-            ></div>
-            <span className="text-base">{item.amount} {item.name}</span>
-          </li>
-        ))}
-      </ul>
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {/* Legend */}
+            <ul className="flex-wrap gap-4 m-5">
+                {ingredientsData.map((item, index) => (
+                <li key={index} className="flex items-center space-x-2">
+                    <div
+                    className="w-5 h-5"
+                    style={{ backgroundColor: item.color, borderRadius:"3px" }}
+                    ></div>
+                    <span className="text-base">
+                    {item.name} {item.amount !== "" && `(${item.amount.trimEnd()})`}
+                    </span>
+                </li>
+                ))}
+            </ul>
+            {/* Pie Chart */}
+            <div className="m-5 justify-start">
+                <PieChart width={120} height={120}>
+                <Pie
+                    data={ingredientsData}
+                    dataKey="pieChartAmount"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={60}
+                    fill="#8884d8"
+                >
+                    {ingredientsData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                </Pie>
+                <Tooltip />
+                </PieChart>
+            </div>
 
-      {/* Pie Chart */}
-      <div className="mx-5 my-5">
-        <PieChart width={120} height={120}>
-          <Pie
-            data={ingredientsData}
-            dataKey="amount"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            outerRadius={60}
-            fill="#8884d8"
-            label
-          >
-            {ingredientsData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color} />
-            ))}
-          </Pie>
-          <Tooltip />
-        </PieChart>
-      </div>
+    </div>
 
       {/* Instructions */}
-      <div className="mx-5 mt-8 mb-5">
+      <div className="mx-5" style={{marginTop:"30px", marginBottom:"20px"}}>
         <h2 className="text-lg font-bold mb-4">Instructions</h2>
         <p className="text-base">{drink.strInstructions}</p>
       </div>

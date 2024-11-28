@@ -31,15 +31,4 @@ const SearchBar: FC<SearchBarProps> = ({ onSearch }) => {
     );
 };
 
-// const SearchBar: FC<SearchBarProps> = ({ onSearch }) => {
-//     return (
-//         <input
-//             type="text"
-//             placeholder="Find a drink"
-//             onChange={(e) => onSearch(e.target.value)}
-//             className="search-bar"
-//         />
-//     );
-// };
-
 export default SearchBar;
